@@ -136,4 +136,6 @@ span | startText | endText | Return value
 # Further remarks
 See the tests for further examples.\
 \
-In general all methods have an optional `startPos` parameter in case searching should not start at 0 (beginning). Beware that for the `SpanBeforeXXX` methods this only influences the search position but not the outcome. Meaning the characters before `startPos` are included in a possible result.
+In general all methods have an optional `startPos` parameter in case searching should not start at 0 (beginning). Beware that for the `SpanBeforeXXX` methods this only influences the search position but not the outcome. Meaning the characters before `startPos` are included in a possible result.\
+\
+Furthermore all methods have an optional `stringComparison` parameter to configure the culture & case sensitivity behaviour. The default value is `Ordinal`. Meaning compare strings using ordinal (binary) sort rules.
