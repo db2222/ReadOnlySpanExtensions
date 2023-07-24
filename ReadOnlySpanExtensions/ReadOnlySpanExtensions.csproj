@@ -1,8 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>1.0.1</Version>
-        <PackageReleaseNotes>Modified &amp; fixed README for NuGet.</PackageReleaseNotes>
+        <Version>1.1.0</Version>
+        <PackageReleaseNotes>v1.1.0
+- Added optional StringComparison parameter.
+
+v1.0.1
+- Modified &amp; fixed README for NuGet.
+
+v1.0.0
+- Initial release.</PackageReleaseNotes>
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>

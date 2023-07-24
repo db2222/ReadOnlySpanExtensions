@@ -432,4 +432,12 @@ public class ReadOnlySpanExtensionsTests
         var result = inputSpan.SpanBetweenOuterIncluding(startText, endText, startingPos);
         Assert.That(result.ToString(), Is.EqualTo(expected));
     }
+
+    [Test]
+    public void ShouldOptionallyIgnoreCase()
+    {
+        var inputSpan = "Test1|Test2".AsSpan();
+        var result = inputSpan.SpanBefore("tEsT2", stringComparison: StringComparison.OrdinalIgnoreCase);
+        Assert.That(result.ToString(), Is.EqualTo("Test1|"));
+    }
 }
