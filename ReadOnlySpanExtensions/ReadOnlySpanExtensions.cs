@@ -218,6 +218,27 @@ public static class ReadOnlySpanExtensions
         return positions.StartIndex != -1 ? span.Slice(positions.StartIndex, startText.Length + positions.EndIndex + endText.Length) : ReadOnlySpan<char>.Empty;
     }
 
+    /// <summary>
+    /// Returns the count of the given text.
+    /// </summary>
+    /// <param name="span">Span to search through.</param>
+    /// <param name="text">Text to search for.</param>
+    /// <param name="startPos">Optional starting position.</param>
+    /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
+    public static int SpanCount(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
+    {
+        var count = 0;
+        if (startPos > 0) span = span[startPos..];
+        var index = span.IndexOf(text, stringComparison);
+        while (index >= 0)
+        {
+            count++;
+            span = span[(index + text.Length)..];
+            index = span.IndexOf(text, stringComparison);
+        }
+        return count;
+    }
+
     private static bool IsValid(ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos)
     {
         return span.Length > 0 && text.Length > 0 && startPos >= 0 && startPos < span.Length;

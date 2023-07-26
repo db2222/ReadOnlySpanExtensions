@@ -133,6 +133,14 @@ span | startText | endText | Return value
 -----|-----------|---------|-------------
 `<td>Dummy1</td><td>Dummy2</td>` | `<td>` | `</td>` | `<td>Dummy1</td><td>Dummy2</td>`
 
+## SpanCount
+Returns the count of the given text.
+
+### Example
+span | text | Return value
+-----|------|-------------
+`Test1/Test2/Test3` | `Test` | `3`
+
 # Further remarks
 See the tests for further examples.\
 \

@@ -440,4 +440,24 @@ public class ReadOnlySpanExtensionsTests
         var result = inputSpan.SpanBefore("tEsT2", stringComparison: StringComparison.OrdinalIgnoreCase);
         Assert.That(result.ToString(), Is.EqualTo("Test1|"));
     }
+
+    [TestCase("Test1/Test2/Test3", "/", 2)]
+    [TestCase("Test1/Test2/Test3", "Test", 3)]
+    [TestCase("Test1/Test2/Test3", "Dummy", 0)]
+    public void ShouldReturnSpanCount(string input, string text, int expected)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanCount(text);
+        Assert.That(result, Is.EqualTo(expected));
+    }
+
+    [TestCase("Test1/Test2/Test3", "/", 5, 2)]
+    [TestCase("Test1/Test2/", "/", 11, 1)]
+    [TestCase("Test1/Test2/", "/", 12, 0)]
+    public void ShouldReturnSpanCountWithStartingPos(string input, string text, int startingPos, int expected)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanCount(text, startingPos);
+        Assert.That(result, Is.EqualTo(expected));
+    }
 }
