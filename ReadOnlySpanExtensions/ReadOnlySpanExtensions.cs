@@ -227,6 +227,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static int SpanCount(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
+        if (!IsValid(span, text, startPos)) return 0;
         var count = 0;
         if (startPos > 0) span = span[startPos..];
         var index = span.IndexOf(text, stringComparison);
