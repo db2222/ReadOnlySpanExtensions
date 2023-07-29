@@ -1,8 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>1.2.0</Version>
-        <PackageReleaseNotes>v1.2.0
+        <Version>1.2.1</Version>
+        <PackageReleaseNotes>v1.2.1
+- Validity check for SpanCount.
+
+v1.2.0
 - Added SpanCount.
 
 v1.1.0
