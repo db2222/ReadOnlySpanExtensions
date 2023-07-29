@@ -141,6 +141,38 @@ span | text | Return value
 -----|------|-------------
 `Test1/Test2/Test3` | `Test` | `3`
 
+## SpanPairSurrounding
+Returns both spans before the given start and after the end text.
+
+### Example
+span | startText | endText | Return value
+-----|------|----------------------------
+`<table><tr><td>Dummy</td></tr></table>` | `<tr>` | `</tr>` | `<table>` / `</table>`
+
+## SpanPairSurroundingIncluding
+Returns both spans before the given start and after the end text including the texts themselves.
+
+### Example
+span | startText | endText | Return value
+-----|------|----------------------------
+`<table><tr><td>Dummy</td></tr></table>` | `<tr>` | `</tr>` | `<table><tr>` / `</tr></table>`
+
+## SpanPairSurroundingOuter
+Returns both spans before the first occurrence of the given start and after the last occurrence of the end text.
+
+### Example
+span | startText | endText | Return value
+-----|------|----------------------------
+`<table><tr><td>Dummy1</td><td>Dummy2</td></tr></table>` | `<td>` | `</td>` | `<table><tr>` / `</tr></table>`
+
+## SpanPairSurroundingOuterIncluding
+Returns both spans before the first occurrence of the given start and after the last occurrence of the end text including the texts themselves.
+
+### Example
+span | startText | endText | Return value
+-----|------|----------------------------
+`<table><tr><td>Dummy1</td><td>Dummy2</td></tr></table>` | `<td>` | `</td>` | `<table><tr><td>` / `</td></tr></table>`
+
 # Further remarks
 See the tests for further examples.\
 \

@@ -460,4 +460,92 @@ public class ReadOnlySpanExtensionsTests
         var result = inputSpan.SpanCount(text, startingPos);
         Assert.That(result, Is.EqualTo(expected));
     }
+
+    [TestCase("<table><tr><td>Dummy</td><td>Dummy2</td></tr></table>", "<td>", "</td>", "<table><tr>", "<td>Dummy2</td></tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "</td>", "<table><tr>", "</tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "", "", "")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "", "</td>", "", "")]
+    [TestCase("<td>Dummy</td>", "<td>", "</td>", "", "")]
+    [TestCase("", "<td>", "</td>", "", "")]
+    public void ShouldReturnSpanPairSurrounding(string input, string startText, string endText, string expectedFirst, string expectedSecond)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanPairSurrounding(startText, endText);
+        Assert.That(result.First.ToString(), Is.EqualTo(expectedFirst));
+        Assert.That(result.Second.ToString(), Is.EqualTo(expectedSecond));
+    }
+
+    [TestCase("<table><tr><td>Dummy</td><td>Dummy2</td></tr></table>", "<td>", "</td>", 25, "<table><tr><td>Dummy</td>", "</tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "</td>", 12, "", "")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "", 39, "", "")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "", "</td>", 0, "", "")]
+    [TestCase("<td>Dummy</td>", "<td>", "</td>", -1, "", "")]
+    [TestCase("", "<td>", "</td>", 100, "", "")]
+    public void ShouldReturnSpanPairSurroundingWithStartingPos(string input, string startText, string endText, int startingPos, string expectedFirst, string expectedSecond)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanPairSurrounding(startText, endText, startingPos);
+        Assert.That(result.First.ToString(), Is.EqualTo(expectedFirst));
+        Assert.That(result.Second.ToString(), Is.EqualTo(expectedSecond));
+    }
+
+    [TestCase("<table><tr><td>Dummy</td><td>Dummy2</td></tr></table>", "<td>", "</td>", "<table><tr><td>", "</td><td>Dummy2</td></tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "</td>", "<table><tr><td>", "</td></tr></table>")]
+    public void ShouldReturnSpanPairSurroundingIncluding(string input, string startText, string endText, string expectedFirst, string expectedSecond)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanPairSurroundingIncluding(startText, endText);
+        Assert.That(result.First.ToString(), Is.EqualTo(expectedFirst));
+        Assert.That(result.Second.ToString(), Is.EqualTo(expectedSecond));
+    }
+
+    [TestCase("<table><tr><td>Dummy</td><td>Dummy2</td></tr></table>", "<td>", "</td>", 25, "<table><tr><td>Dummy</td><td>", "</td></tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "</td>", 12, "", "")]
+    public void ShouldReturnSpanPairSurroundingIncludingWithStartingPos(string input, string startText, string endText, int startingPos, string expectedFirst, string expectedSecond)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanPairSurroundingIncluding(startText, endText, startingPos);
+        Assert.That(result.First.ToString(), Is.EqualTo(expectedFirst));
+        Assert.That(result.Second.ToString(), Is.EqualTo(expectedSecond));
+    }
+
+    [TestCase("<table><tr><td>Dummy</td><td>Dummy2</td></tr></table>", "<td>", "</td>", "<table><tr>", "</tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "</td>", "<table><tr>", "</tr></table>")]
+    public void ShouldReturnSpanPairSurroundingOuter(string input, string startText, string endText, string expectedFirst, string expectedSecond)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanPairSurroundingOuter(startText, endText);
+        Assert.That(result.First.ToString(), Is.EqualTo(expectedFirst));
+        Assert.That(result.Second.ToString(), Is.EqualTo(expectedSecond));
+    }
+
+    [TestCase("<table><tr><td>Dummy</td><td>Dummy2</td></tr></table>", "<td>", "</td>", 25, "<table><tr><td>Dummy</td>", "</tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "</td>", 12, "", "")]
+    public void ShouldReturnSpanPairSurroundingOuterWithStartingPos(string input, string startText, string endText, int startingPos, string expectedFirst, string expectedSecond)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanPairSurroundingOuter(startText, endText, startingPos);
+        Assert.That(result.First.ToString(), Is.EqualTo(expectedFirst));
+        Assert.That(result.Second.ToString(), Is.EqualTo(expectedSecond));
+    }
+
+    [TestCase("<table><tr><td>Dummy</td><td>Dummy2</td></tr></table>", "<td>", "</td>", "<table><tr><td>", "</td></tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "</td>", "<table><tr><td>", "</td></tr></table>")]
+    public void ShouldReturnSpanPairSurroundingOuterIncluding(string input, string startText, string endText, string expectedFirst, string expectedSecond)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanPairSurroundingOuterIncluding(startText, endText);
+        Assert.That(result.First.ToString(), Is.EqualTo(expectedFirst));
+        Assert.That(result.Second.ToString(), Is.EqualTo(expectedSecond));
+    }
+
+    [TestCase("<table><tr><td>Dummy</td><td>Dummy2</td></tr></table>", "<td>", "</td>", 25, "<table><tr><td>Dummy</td><td>", "</td></tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "</td>", 12, "", "")]
+    public void ShouldReturnSpanPairSurroundingOuterIncludingWithStartingPos(string input, string startText, string endText, int startingPos, string expectedFirst, string expectedSecond)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanPairSurroundingOuterIncluding(startText, endText, startingPos);
+        Assert.That(result.First.ToString(), Is.EqualTo(expectedFirst));
+        Assert.That(result.Second.ToString(), Is.EqualTo(expectedSecond));
+    }
 }

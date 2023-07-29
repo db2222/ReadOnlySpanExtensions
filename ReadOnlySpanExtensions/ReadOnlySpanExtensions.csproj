@@ -1,8 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>1.2.1</Version>
-        <PackageReleaseNotes>v1.2.1
+        <Version>1.3.0</Version>
+        <PackageReleaseNotes>v1.3.0
+- Added SpainPairSurrounding.
+
+v1.2.1
 - Validity check for SpanCount.
 
 v1.2.0
