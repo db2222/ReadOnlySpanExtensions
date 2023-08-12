@@ -250,7 +250,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpanPair<char> SpanPairSurrounding(this ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        return GetSpanPairSourrounding(span, startText, endText, startPos, stringComparison);
+        return GetSpanPairSurrounding(span, startText, endText, startPos, stringComparison);
     }
 
     /// <summary>
@@ -263,7 +263,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpanPair<char> SpanPairSurroundingIncluding(this ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        return GetSpanPairSourrounding(span, startText, endText, startPos, stringComparison, true);
+        return GetSpanPairSurrounding(span, startText, endText, startPos, stringComparison, true);
     }
 
     /// <summary>
@@ -276,7 +276,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpanPair<char> SpanPairSurroundingOuter(this ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        return GetSpanPairSourrounding(span, startText, endText, startPos, stringComparison, lastForEndText: true);
+        return GetSpanPairSurrounding(span, startText, endText, startPos, stringComparison, lastForEndText: true);
     }
 
     /// <summary>
@@ -289,7 +289,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpanPair<char> SpanPairSurroundingOuterIncluding(this ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        return GetSpanPairSourrounding(span, startText, endText, startPos, stringComparison, true, true);
+        return GetSpanPairSurrounding(span, startText, endText, startPos, stringComparison, true, true);
     }
 
     private static bool IsValid(ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos)
@@ -330,7 +330,7 @@ public static class ReadOnlySpanExtensions
         return (startIndex, endIndex);
     }
 
-    private static ReadOnlySpanPair<char> GetSpanPairSourrounding(ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos, StringComparison stringComparison, bool includingTexts = false, bool lastForEndText = false)
+    private static ReadOnlySpanPair<char> GetSpanPairSurrounding(ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos, StringComparison stringComparison, bool includingTexts = false, bool lastForEndText = false)
     {
         var (StartIndex, EndIndex) = GetPositionsForBetween(span, startText, endText, startPos, stringComparison, lastForEndText);
         if (StartIndex == -1) return new ReadOnlySpanPair<char>(ReadOnlySpan<char>.Empty, ReadOnlySpan<char>.Empty);
