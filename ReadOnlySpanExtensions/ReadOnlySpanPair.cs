@@ -10,5 +10,11 @@
             First = first;
             Second = second;
         }
+        
+        public ReadOnlySpanPair()
+        {
+            First = ReadOnlySpan<T>.Empty;
+            Second = ReadOnlySpan<T>.Empty;
+        }
     }
 }

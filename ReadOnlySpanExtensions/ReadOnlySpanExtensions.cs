@@ -11,7 +11,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpan<char> SpanBefore(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        var index = GetIndex(span, text, startPos, stringComparison);
+        var index = ValidateAndGetIndex(span, text, startPos, stringComparison);
         return index != -1 ? span[..index] : ReadOnlySpan<char>.Empty;
     }
 
@@ -24,7 +24,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpan<char> SpanBeforeIncluding(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        var index = GetIndex(span, text, startPos, stringComparison);
+        var index = ValidateAndGetIndex(span, text, startPos, stringComparison);
         return index != -1 ? span[..(index + text.Length)] : ReadOnlySpan<char>.Empty;
     }
 
@@ -37,7 +37,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpan<char> SpanBeforeLast(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        var index = GetIndex(span, text, startPos, stringComparison, true);
+        var index = ValidateAndGetIndex(span, text, startPos, stringComparison, true);
         return index != -1 ? span[..index] : ReadOnlySpan<char>.Empty;
     }
 
@@ -50,7 +50,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpan<char> SpanBeforeLastIncluding(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        var index = GetIndex(span, text, startPos, stringComparison, true);
+        var index = ValidateAndGetIndex(span, text, startPos, stringComparison, true);
         return index != -1 ? span[..(index + text.Length)] : ReadOnlySpan<char>.Empty;
     }
 
@@ -91,7 +91,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpan<char> SpanAfter(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        var index = GetIndex(span, text, startPos, stringComparison);
+        var index = ValidateAndGetIndex(span, text, startPos, stringComparison);
         return index != -1 ? span[(index + text.Length)..] : ReadOnlySpan<char>.Empty;
     }
 
@@ -104,7 +104,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpan<char> SpanAfterIncluding(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        var index = GetIndex(span, text, startPos, stringComparison);
+        var index = ValidateAndGetIndex(span, text, startPos, stringComparison);
         return index != -1 ? span[index..] : ReadOnlySpan<char>.Empty;
     }
 
@@ -117,7 +117,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpan<char> SpanAfterLast(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        var index = GetIndex(span, text, startPos, stringComparison, true);
+        var index = ValidateAndGetIndex(span, text, startPos, stringComparison, true);
         return index != -1 ? span[(index + text.Length)..] : ReadOnlySpan<char>.Empty;
     }
 
@@ -130,7 +130,7 @@ public static class ReadOnlySpanExtensions
     /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
     public static ReadOnlySpan<char> SpanAfterLastIncluding(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
     {
-        var index = GetIndex(span, text, startPos, stringComparison, true);
+        var index = ValidateAndGetIndex(span, text, startPos, stringComparison, true);
         return index != -1 ? span[index..] : ReadOnlySpan<char>.Empty;
     }
 
@@ -219,6 +219,36 @@ public static class ReadOnlySpanExtensions
     }
 
     /// <summary>
+    /// Returns all characters between the nth occurence of the given start and end text.
+    /// </summary>
+    /// <param name="span">Span to search through.</param>
+    /// <param name="startText">Start text to search for.</param>
+    /// <param name="endText">End text to search for.</param>
+    /// <param name="count">Expected nth occurence.</param>
+    /// <param name="startPos">Optional starting position.</param>
+    /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
+    public static ReadOnlySpan<char> SpanBetweenNth(this ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int count, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
+    {
+        var (startIndex, endIndex) = GetPositionsForBetween(span, startText, endText, startPos, stringComparison, count: count);
+        return startIndex != -1 ? span.Slice(startIndex + startText.Length, endIndex) : ReadOnlySpan<char>.Empty;
+    }
+
+    /// <summary>
+    /// Returns all characters between the nth occurence of the given start and end text and including the texts themselves.
+    /// </summary>
+    /// <param name="span">Span to search through.</param>
+    /// <param name="startText">Start text to search for.</param>
+    /// <param name="endText">End text to search for.</param>
+    /// <param name="count">Expected nth occurence.</param>
+    /// <param name="startPos">Optional starting position.</param>
+    /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
+    public static ReadOnlySpan<char> SpanBetweenNthIncluding(this ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int count, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
+    {
+        var (startIndex, endIndex) = GetPositionsForBetween(span, startText, endText, startPos, stringComparison, count: count);
+        return startIndex != -1 ? span.Slice(startIndex, startText.Length + endIndex + endText.Length) : ReadOnlySpan<char>.Empty;
+    }
+    
+    /// <summary>
     /// Returns the count of the given text.
     /// </summary>
     /// <param name="span">Span to search through.</param>
@@ -238,6 +268,20 @@ public static class ReadOnlySpanExtensions
             index = span.IndexOf(text, stringComparison);
         }
         return count;
+    }
+    
+    /// <summary>
+    /// Returns both spans before and after the given text.
+    /// </summary>
+    /// <param name="span">Span to search through.</param>
+    /// <param name="text">Text to search for.</param>
+    /// <param name="startPos">Optional starting position.</param>
+    /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
+    public static ReadOnlySpanPair<char> SpanPairSurrounding(this ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
+    {
+        if (!IsValid(span, text, startPos)) return new ReadOnlySpanPair<char>();
+        var index = GetIndex(span, text, startPos, stringComparison);
+        return index != -1 ? new ReadOnlySpanPair<char>(span[..index], span[(index + text.Length)..]) : new ReadOnlySpanPair<char>();
     }
 
     /// <summary>
@@ -297,9 +341,14 @@ public static class ReadOnlySpanExtensions
         return span.Length > 0 && text.Length > 0 && startPos >= 0 && startPos < span.Length;
     }
     
-    private static int GetIndex(ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos, StringComparison stringComparison, bool useLastIndexOf = false)
+    private static int ValidateAndGetIndex(ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos, StringComparison stringComparison, bool useLastIndexOf = false)
     {
         if (!IsValid(span, text, startPos)) return -1;
+        return GetIndex(span, text, startPos, stringComparison, useLastIndexOf);
+    }
+    
+    private static int GetIndex(ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos, StringComparison stringComparison, bool useLastIndexOf = false)
+    {
         if (startPos == 0) return useLastIndexOf ? span.LastIndexOf(text, stringComparison) : span.IndexOf(text, stringComparison);
         var index = useLastIndexOf ? span[startPos..].LastIndexOf(text, stringComparison) : span[startPos..].IndexOf(text, stringComparison);
         return index != -1 ? index + startPos : -1;
@@ -319,21 +368,27 @@ public static class ReadOnlySpanExtensions
         return index;
     }
 
-    private static (int startIndex, int endIndex) GetPositionsForBetween(ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos, StringComparison stringComparison, bool lastForEndText = false)
+    private static (int startIndex, int endIndex) GetPositionsForBetween(ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos, StringComparison stringComparison, bool lastForEndText = false, int count = 1)
     {
-        if (endText.Length == 0) return (-1, -1);
-        var startIndex = GetIndex(span, startText, startPos, stringComparison);
-        if (startIndex == -1) return (-1, -1);
-        span = span[(startIndex + startText.Length)..];
-        var endIndex = lastForEndText ? span.LastIndexOf(endText, stringComparison) : span.IndexOf(endText, stringComparison);
-        if (endIndex == -1) return (-1, -1);
-        return (startIndex, endIndex);
+        if (!IsValid(span, startText, startPos) || endText.Length == 0 || count <= 0) return (-1, -1);
+        var startIndex = 0;
+        var endIndex = 0;
+        for (var i = 1; i <= count; i++)
+        {
+            startIndex = GetIndex(span, startText, startPos, stringComparison);
+            if (startIndex == -1) return (-1, -1);
+            startPos = startIndex + startText.Length;
+            endIndex = GetIndex(span, endText, startPos, stringComparison, lastForEndText);
+            if (endIndex == -1) return (-1, -1);
+            startPos = endIndex + endText.Length;
+        }
+        return (startIndex, endIndex - startIndex - startText.Length);
     }
 
     private static ReadOnlySpanPair<char> GetSpanPairSurrounding(ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos, StringComparison stringComparison, bool includingTexts = false, bool lastForEndText = false)
     {
         var (startIndex, endIndex) = GetPositionsForBetween(span, startText, endText, startPos, stringComparison, lastForEndText);
-        if (startIndex == -1) return new ReadOnlySpanPair<char>(ReadOnlySpan<char>.Empty, ReadOnlySpan<char>.Empty);
+        if (startIndex == -1) return new ReadOnlySpanPair<char>();
         if (includingTexts) startIndex += startText.Length;
         var startSpan = span[..startIndex];
         if (!includingTexts) endIndex += startText.Length + endText.Length;

@@ -133,6 +133,22 @@ span | startText | endText | Return value
 -----|-----------|---------|-------------
 `<td>Dummy1</td><td>Dummy2</td>` | `<td>` | `</td>` | `<td>Dummy1</td><td>Dummy2</td>`
 
+## SpanBetweenNth
+Returns all characters between the nth occurence of the given start and end text.
+
+### Example
+span | startText | endText | count | Return value
+-----|-----------|---------|-------|-------------
+`<td>Dummy1</td><td>Dummy2</td>` | `<td>` | `</td>` | `2` | `Dummy2`
+
+## SpanBetweenNthIncluding
+Returns all characters between the nth occurence of the given start and end text and including the texts themselves.
+
+### Example
+span | startText | endText | count | Return value
+-----|-----------|---------|-------|-------------
+`<td>Dummy1</td><td>Dummy2</td>` | `<td>` | `</td>` | `2` | `<td>Dummy2</td>`
+
 ## SpanCount
 Returns the count of the given text.
 
@@ -141,7 +157,15 @@ span | text | Return value
 -----|------|-------------
 `Test1/Test2/Test3` | `Test` | `3`
 
-## SpanPairSurrounding
+## SpanPairSurrounding (for single text)
+Returns both spans before and after the given text.
+
+### Example
+span | text | Return value
+-----|------|-------------
+`Test1/Test2` | `/` | `Test1` / `Test2` 
+
+## SpanPairSurrounding (for start/end text)
 Returns both spans before the given start and after the end text.
 
 ### Example
