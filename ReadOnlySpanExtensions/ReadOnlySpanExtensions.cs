@@ -217,6 +217,34 @@ public static class ReadOnlySpanExtensions
         var (startIndex, endIndex) = GetPositionsForBetween(span, startText, endText, startPos, stringComparison, true);
         return startIndex != -1 ? span.Slice(startIndex, startText.Length + endIndex + endText.Length) : ReadOnlySpan<char>.Empty;
     }
+    
+    /// <summary>
+    /// Returns all characters between the last occurence of the given start and end text.
+    /// </summary>
+    /// <param name="span">Span to search through.</param>
+    /// <param name="startText">Start text to search for.</param>
+    /// <param name="endText">End text to search for.</param>
+    /// <param name="startPos">Optional starting position.</param>
+    /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
+    public static ReadOnlySpan<char> SpanBetweenLast(this ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
+    {
+        var (startIndex, endIndex) = GetPositionsForBetweenLast(span, startText, endText, startPos, stringComparison);
+        return startIndex != -1 ? span.Slice(startIndex + startText.Length, endIndex) : ReadOnlySpan<char>.Empty;
+    }
+
+    /// <summary>
+    /// Returns all characters between the last occurence of the given start and end text and including the texts themselves.
+    /// </summary>
+    /// <param name="span">Span to search through.</param>
+    /// <param name="startText">Start text to search for.</param>
+    /// <param name="endText">End text to search for.</param>
+    /// <param name="startPos">Optional starting position.</param>
+    /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
+    public static ReadOnlySpan<char> SpanBetweenLastIncluding(this ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
+    {
+        var (startIndex, endIndex) = GetPositionsForBetweenLast(span, startText, endText, startPos, stringComparison);
+        return startIndex != -1 ? span.Slice(startIndex, startText.Length + endIndex + endText.Length) : ReadOnlySpan<char>.Empty;
+    }
 
     /// <summary>
     /// Returns all characters between the nth occurence of the given start and end text.
@@ -381,6 +409,23 @@ public static class ReadOnlySpanExtensions
             endIndex = GetIndex(span, endText, startPos, stringComparison, lastForEndText);
             if (endIndex == -1) return (-1, -1);
             startPos = endIndex + endText.Length;
+        }
+        return (startIndex, endIndex - startIndex - startText.Length);
+    }
+
+    private static (int startIndex, int endIndex) GetPositionsForBetweenLast(ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos, StringComparison stringComparison)
+    {
+        if (startText.Length == 0) return (-1, -1);
+        var endIndex = ValidateAndGetIndex(span, endText, startPos, stringComparison, true);
+        if (endIndex == -1) return (-1, -1);
+        var startIndex = GetIndex(span, startText, startPos, stringComparison, true);
+        if (startIndex == -1) return (-1, -1);
+        //We could do this directly but as it is a bit less efficient and should be such a rare scenario, cover it only if needed.
+        if (startIndex > endIndex - startText.Length)
+        {
+            span = span[..endIndex];
+            startIndex = GetIndex(span, startText, startPos, stringComparison, true);
+            if (startIndex == -1) return (-1, -1);
         }
         return (startIndex, endIndex - startIndex - startText.Length);
     }

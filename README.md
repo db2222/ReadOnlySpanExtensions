@@ -133,13 +133,29 @@ span | startText | endText | Return value
 -----|-----------|---------|-------------
 `<td>Dummy1</td><td>Dummy2</td>` | `<td>` | `</td>` | `<td>Dummy1</td><td>Dummy2</td>`
 
+## SpanBetweenLast
+Returns all characters between the last occurence of the given start and end text.
+
+### Example
+span | startText | endText | Return value
+-----|-----------|---------|-------------
+`<td>Dummy1</td><td>Dummy2</td>` | `<td>` | `</td>` | `Dummy2`
+
+## SpanBetweenLastIncluding
+Returns all characters between the last occurence of the given start and end text and including the texts themselves.
+
+### Example
+span | startText | endText | Return value
+-----|-----------|---------|-------------
+`<td>Dummy1</td><td>Dummy2</td>` | `<td>` | `</td>` | `<td>Dummy2</td>`
+
 ## SpanBetweenNth
 Returns all characters between the nth occurence of the given start and end text.
 
 ### Example
 span | startText | endText | count | Return value
 -----|-----------|---------|-------|-------------
-`<td>Dummy1</td><td>Dummy2</td>` | `<td>` | `</td>` | `2` | `Dummy2`
+`<td>Dummy1</td><td>Dummy2</td><td>Dummy3</td>` | `<td>` | `</td>` | `2` | `Dummy2`
 
 ## SpanBetweenNthIncluding
 Returns all characters between the nth occurence of the given start and end text and including the texts themselves.
@@ -147,7 +163,7 @@ Returns all characters between the nth occurence of the given start and end text
 ### Example
 span | startText | endText | count | Return value
 -----|-----------|---------|-------|-------------
-`<td>Dummy1</td><td>Dummy2</td>` | `<td>` | `</td>` | `2` | `<td>Dummy2</td>`
+`<td>Dummy1</td><td>Dummy2</td><td>Dummy3</td>` | `<td>` | `</td>` | `2` | `<td>Dummy2</td>`
 
 ## SpanCount
 Returns the count of the given text.

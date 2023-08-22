@@ -1,8 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>1.4.0</Version>
-        <PackageReleaseNotes>v1.4.0
+        <Version>1.5.0</Version>
+        <PackageReleaseNotes>v1.5.0
+- Added SpanBetweenLast.
+
+v1.4.0
 - Added SpanBetweenNth &amp; SpanPairSurrounding (for single text).
 
 v1.3.1

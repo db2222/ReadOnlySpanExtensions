@@ -433,6 +433,58 @@ public class ReadOnlySpanExtensionsTests
         Assert.That(result.ToString(), Is.EqualTo(expected));
     }
     
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", "Dummy3")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<th>", "</th>", "")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "", "</td>", "")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "", "")]
+    [TestCase("[X]Dummy[X]", "[X]", "[X]", "Dummy")]
+    [TestCase("[X]Dummy[X]", "X", "X", "]Dummy[")]
+    [TestCase("[X][X]", "[X]", "[X]", "")]
+    [TestCase("[X][X]", "X", "[X]", "]")]
+    public void ShouldReturnSpanBetweenLast(string input, string startText, string endText, string expected)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanBetweenLast(startText, endText);
+        Assert.That(result.ToString(), Is.EqualTo(expected));
+    }
+    
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 0, "Dummy3")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 29, "Dummy3")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 30, "")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 45, "")]
+    public void ShouldReturnSpanBetweenLastWithStartingPos(string input, string startText, string endText, int startingPos, string expected)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanBetweenLast(startText, endText, startingPos);
+        Assert.That(result.ToString(), Is.EqualTo(expected));
+    }
+    
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", "<td>Dummy3</td>")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<th>", "</th>", "")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "", "</td>", "")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "", "")]
+    [TestCase("[X]Dummy[X]", "[X]", "[X]", "[X]Dummy[X]")]
+    [TestCase("[X]Dummy[X]", "X", "X", "X]Dummy[X")]
+    [TestCase("[X][X]", "[X]", "[X]", "[X][X]")]
+    [TestCase("[X][X]", "X", "[X]", "X][X]")]
+    public void ShouldReturnSpanBetweenLastIncluding(string input, string startText, string endText, string expected)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanBetweenLastIncluding(startText, endText);
+        Assert.That(result.ToString(), Is.EqualTo(expected));
+    }
+    
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 0, "<td>Dummy3</td>")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 29, "<td>Dummy3</td>")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 30, "")]
+    [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 45, "")]
+    public void ShouldReturnSpanBetweenLastIncludingWithStartingPos(string input, string startText, string endText, int startingPos, string expected)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanBetweenLastIncluding(startText, endText, startingPos);
+        Assert.That(result.ToString(), Is.EqualTo(expected));
+    }
+    
     [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 1, "Dummy")]
     [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 2, "Dummy2")]
     [TestCase("<td>Dummy</td><td>Dummy2</td><td>Dummy3</td>", "<td>", "</td>", 3, "Dummy3")]
