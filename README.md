@@ -213,6 +213,22 @@ span | startText | endText | Return value
 -----|-----------|---------|-------------
 `<table><tr><td>Dummy1</td><td>Dummy2</td></tr></table>` | `<td>` | `</td>` | `<table><tr><td>` / `</td></tr></table>`
 
+## SpanRemoveBetween
+Returns a new string where the text between the given start and end text are removed.
+
+### Example
+span | startText | endText | Return value
+-----|-----------|---------|-------------
+`<table><tr><td>Dummy1</td><td>Dummy2</td></tr></table>` | `<td>` | `</td>` | `<table><tr><td></td><td>Dummy2</td></tr></table>`
+
+## SpanRemoveBetweenIncluding
+Returns a new string where the text between and including the given start and end text are removed.
+
+### Example
+span | startText | endText | Return value
+-----|-----------|---------|-------------
+`<table><tr><td>Dummy1</td><td>Dummy2</td></tr></table>` | `<td>` | `</td>` | `<table><tr><td>Dummy2</td></tr></table>`
+
 # Further remarks
 See the tests for further examples.\
 \
