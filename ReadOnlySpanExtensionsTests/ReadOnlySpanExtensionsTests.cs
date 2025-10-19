@@ -588,6 +588,7 @@ public class ReadOnlySpanExtensionsTests
     [TestCase("<table><tr><td>Dummy</td></tr></table>", "", "</td>", "", "")]
     [TestCase("<td>Dummy</td>", "<td>", "</td>", "", "")]
     [TestCase("", "<td>", "</td>", "", "")]
+    [TestCase("<table><tr><td>Dummy</td>", "<tr>", "</tr>", "", "")]
     public void ShouldReturnSpanPairSurrounding(string input, string startText, string endText, string expectedFirst, string expectedSecond)
     {
         var inputSpan = input.AsSpan();
@@ -668,5 +669,41 @@ public class ReadOnlySpanExtensionsTests
         var result = inputSpan.SpanPairSurroundingOuterIncluding(startText, endText, startingPos);
         Assert.That(result.First.ToString(), Is.EqualTo(expectedFirst));
         Assert.That(result.Second.ToString(), Is.EqualTo(expectedSecond));
+    }
+    
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "</td>", "<table><tr><td></td></tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<th>", "</th>", "<table><tr><td>Dummy</td></tr></table>")]
+    public void ShouldSpanRemoveBetween(string input, string startText, string endText, string expected)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanRemoveBetween(startText, endText);
+        Assert.That(result, Is.EqualTo(expected));
+    }
+    
+    [TestCase("<table><tr><td>Dummy</td><td>Dummy2</td></tr></table>", "<td>", "</td>", 25, "<table><tr><td>Dummy</td><td></td></tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<th>", "</th>", 100, "<table><tr><td>Dummy</td></tr></table>")]
+    public void ShouldSpanRemoveBetweenWithStartingPos(string input, string startText, string endText, int startingPos, string expected)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanRemoveBetween(startText, endText, startingPos);
+        Assert.That(result, Is.EqualTo(expected));
+    }
+    
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<td>", "</td>", "<table><tr></tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<th>", "</th>", "<table><tr><td>Dummy</td></tr></table>")]
+    public void ShouldSpanRemoveBetweenIncluding(string input, string startText, string endText, string expected)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanRemoveBetweenIncluding(startText, endText);
+        Assert.That(result, Is.EqualTo(expected));
+    }
+    
+    [TestCase("<table><tr><td>Dummy</td><td>Dummy2</td></tr></table>", "<td>", "</td>", 25, "<table><tr><td>Dummy</td></tr></table>")]
+    [TestCase("<table><tr><td>Dummy</td></tr></table>", "<th>", "</th>", 100, "<table><tr><td>Dummy</td></tr></table>")]
+    public void ShouldSpanRemoveBetweenIncludingWithStartingPos(string input, string startText, string endText, int startingPos, string expected)
+    {
+        var inputSpan = input.AsSpan();
+        var result = inputSpan.SpanRemoveBetweenIncluding(startText, endText, startingPos);
+        Assert.That(result, Is.EqualTo(expected));
     }
 }

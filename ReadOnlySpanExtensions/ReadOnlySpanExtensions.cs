@@ -364,6 +364,36 @@ public static class ReadOnlySpanExtensions
         return GetSpanPairSurrounding(span, startText, endText, startPos, stringComparison, true, true);
     }
 
+    /// <summary>
+    /// Returns a new string where the text between the given start and end text are removed.
+    /// </summary>
+    /// <param name="span">Span to search through.</param>
+    /// <param name="startText">Start text to search for.</param>
+    /// <param name="endText">End text to search for.</param>
+    /// <param name="startPos">Optional starting position.</param>
+    /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
+    public static string SpanRemoveBetween(this ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
+    {
+        var spanPair = SpanPairSurroundingIncluding(span, startText, endText, startPos, stringComparison);
+        if (spanPair.First.IsEmpty && spanPair.Second.IsEmpty) return span.ToString();
+        return string.Concat(spanPair.First, spanPair.Second);
+    }
+    
+    /// <summary>
+    /// Returns a new string where the text between and including the given start and end text are removed.
+    /// </summary>
+    /// <param name="span">Span to search through.</param>
+    /// <param name="startText">Start text to search for.</param>
+    /// <param name="endText">End text to search for.</param>
+    /// <param name="startPos">Optional starting position.</param>
+    /// <param name="stringComparison">Optional culture & case sensitivity rule.</param>
+    public static string SpanRemoveBetweenIncluding(this ReadOnlySpan<char> span, ReadOnlySpan<char> startText, ReadOnlySpan<char> endText, int startPos = 0, StringComparison stringComparison = StringComparison.Ordinal)
+    {
+        var spanPair = SpanPairSurrounding(span, startText, endText, startPos, stringComparison);
+        if (spanPair.First.IsEmpty && spanPair.Second.IsEmpty) return span.ToString();
+        return string.Concat(spanPair.First, spanPair.Second);
+    }
+
     private static bool IsValid(ReadOnlySpan<char> span, ReadOnlySpan<char> text, int startPos)
     {
         return span.Length > 0 && text.Length > 0 && startPos >= 0 && startPos < span.Length;
